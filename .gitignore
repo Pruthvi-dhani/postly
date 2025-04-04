@@ -23,10 +23,6 @@ media/
 staticfiles/
 local_settings.py
 
-# Django migrations
-**/migrations/
-!**/migrations/__init__.py
-
 # Environment variables
 .env
 .env.*
