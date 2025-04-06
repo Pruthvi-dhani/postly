@@ -14,8 +14,10 @@ class UserDetailsView(APIView):
     """
     controller to handle user creation, view details, update details and deletion
     """
-    def get(self, request: Request):
-        pass
+    def get(self, request: Request, user_id):
+        user_obj = User.objects.get(pk=user_id)
+        user_resp = UserDetailsResponse(user_obj)
+        return Response(user_resp.data, status=status.HTTP_200_OK)
 
     def post(self, request: Request):
         cleaned_request = CreateUserRequest(data=request.data)
