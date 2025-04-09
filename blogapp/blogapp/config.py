@@ -16,6 +16,8 @@ class AppConfig:
         self._prop_map["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
         self._prop_map["ACCESS_TOKEN_EXPIRY_MINS"] = int(os.environ.get("ACCESS_TOKEN_EXPIRY_MINS"))
         self._prop_map["REFRESH_TOKEN_EXPIRY_MINS"] = int(os.environ.get("REFRESH_TOKEN_EXPIRY_MINS"))
+        self._prop_map["DEBUG_MODE"] = bool(int(os.environ.get("DEBUG_MODE")))
+        self._prop_map["DJANGO_SECRET_KEY"] = os.environ.get("DJANGO_SECRET_KEY")
 
     def get_value(self, key):
         return self._prop_map[key]
