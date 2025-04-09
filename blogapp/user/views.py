@@ -6,7 +6,7 @@ from rest_framework import status
 
 from user.serializers import CreateUserRequest, UserDetailsResponse
 from user.models import User
-from blogapp.password_utils import encode_password, is_correct_password
+from blogapp.security_utils import encode_password
 
 
 # Create your views here.
