@@ -58,7 +58,6 @@ def validate_and_return_user_id_jwt_token(token: str) -> int:
     except ExpiredSignatureError:
         raise CustomException(JWT_TOKEN_EXPIRED_MSG, JWT_TOKEN_EXPIRED_CODE)
     except InvalidTokenError:
-        print("token:", token)
         raise CustomException(JWT_TOKEN_INVALID_MSG, JWT_TOKEN_INVALID_CODE)
     if "user_id" not in payload:
         raise CustomException(JWT_TOKEN_ID_NOT_PRESENT_MSG, JWT_TOKEN_ID_NOT_PRESENT_CODE)
