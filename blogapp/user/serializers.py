@@ -8,4 +8,13 @@ class CreateUserRequest(serializers.Serializer):
     username = serializers.CharField(max_length=50, allow_null=False, allow_blank=False)
     email = serializers.CharField(max_length=256, allow_null=False, allow_blank=False)
     about = serializers.CharField(max_length=1024)
+    password = serializers.CharField(max_length=72, allow_null=False, allow_blank=False, min_length=12)
 
+
+class UserDetailsResponse(serializers.Serializer):
+    """
+    response object for user domain model
+    """
+    id = serializers.IntegerField()
+    email = serializers.CharField(max_length=256, allow_null=False, allow_blank=False)
+    about = serializers.CharField(max_length=1024)
