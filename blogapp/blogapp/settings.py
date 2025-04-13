@@ -46,7 +46,8 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    "blogapp.custom_middleware.RequestResponseLogging",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -90,6 +91,38 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "redact_private_info": {
+            "()": "blogapp.logging_filters.SecurityLoggingFilter"
+        }
+    },
+
+    "formatters": {
+        "simple": {
+            "format": "{levelname} {asctime} {name}: {message}",
+            "style": "{",
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "filters": ["redact_private_info"]
+        },
+    },
+
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",  # Change to DEBUG for development
+    },
+}
+
+
+ALLOWED_HOSTS = app_config.get_value("ALLOWED_HOSTS")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
