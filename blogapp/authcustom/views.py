@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, NotFound, AuthenticationFailed
 from rest_framework import status
 
-from auth.serializers import UserLoginRequest
+from authcustom.serializers import UserLoginRequest
 from blogapp.custom_exceptions import CustomException, JWT_TOKEN_MISSING_MSG, JWT_TOKEN_MISSING_CODE
 from blogapp.security_utils import is_correct_password, generate_refresh_token, validate_and_return_user_id_jwt_token, \
     generate_access_token
