@@ -3,19 +3,19 @@ import logging
 import re
 
 
-SENSITIVE_KEYS = ["access_token", "refresh_token", "password"]
+SENSITIVE_KEYS = ["access_token", "refresh_token", "password", "access-token"]
 
 
 def clean_dict_keys(json_dict: dict | list):
     """
     cleans sensitive keys from json type object
     """
-    if type(json_dict) == dict:
+    if isinstance(json_dict, dict):
         for key in json_dict:
-            if key in SENSITIVE_KEYS:
+            if isinstance(key, str) and key.lower() in SENSITIVE_KEYS:
                 json_dict[key] = "****"
             clean_dict_keys(json_dict[key])
-    elif type(json_dict) == list:
+    elif isinstance(json_dict, list):
         for val in json_dict:
             clean_dict_keys(val)
 
@@ -36,8 +36,8 @@ class SecurityLoggingFilter(logging.Filter):
         except Exception:
             # if json parsing fails - then we blank out the plain text
             for key in SENSITIVE_KEYS:
-                pattern = rf'({key}[:=])\S*'
-                msg = re.sub(r'(token=|password:\s*)\S+', r'\1****', msg)
+                pattern = rf"({re.escape(key)}\s*[=:]\s*)\S+"
+                msg = re.sub(pattern, r"\1****", msg)
             record.msg = msg
             record.args = None
         return True
