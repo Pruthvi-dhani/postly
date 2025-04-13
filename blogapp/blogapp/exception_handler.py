@@ -1,3 +1,4 @@
+import logging
 import traceback
 
 from rest_framework.views import exception_handler
@@ -18,7 +19,7 @@ def customer_exception_handler(exec, context):
             "message": exec.message
         }, status.HTTP_200_OK)
     exception_trace = ''.join(traceback.TracebackException.from_exception(exec).format())
-    print("Received exception:", exception_trace)
+    logging.error("Received exception:" + str(exception_trace))
     return Response({
         "detail": "Something went wrong, please try again later..."
     },

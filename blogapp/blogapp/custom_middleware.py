@@ -22,7 +22,9 @@ class RequestResponseLogging:
         request_log_str = list()
         request_log_str.append("Request uri: " + request.get_full_path())
         request_log_str.append("Request method: " + request.method)
-        request_log_str.append("Request headers: " + str(request.headers))
+        request_headers_copy = dict(request.headers)
+        clean_dict_keys(request_headers_copy)
+        request_log_str.append("Request headers: " + str(request_headers_copy))
         # get the request body and reset it for further down the stack
         request_body = request.body
         try:
@@ -41,7 +43,9 @@ class RequestResponseLogging:
         response: Response = self.get_response(request)
         # log the response before sending this back to the calling view
         response_log_str = list()
-        response_log_str.append("Response headers: " + str(response.headers))
+        response_headers_copy = dict(response.headers)
+        clean_dict_keys(response_headers_copy)
+        response_log_str.append("Response headers: " + str(response_headers_copy))
         response_data_copy = deepcopy(response.data)
         clean_dict_keys(response_data_copy)
         response_log_str.append("Response body: " + str(response_data_copy))
