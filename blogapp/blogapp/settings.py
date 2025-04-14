@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "user",
     "authcustom",
-    "posts"
+    "posts",
+    "comments"
 ]
 
 MIDDLEWARE = [

@@ -20,5 +20,6 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path("user/", include("user.urls")),
     path("auth/", include("authcustom.urls")),
-    path("post/", include("posts.urls"))
+    path("post/", include("posts.urls")),
+    path("comment/", include("comments.urls"))
 ]
