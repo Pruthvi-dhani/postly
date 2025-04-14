@@ -24,4 +24,4 @@ jobs:
 
     - name: Run Pylint
       run: |
-        pylint --load-plugins pylint_django myproject/
+        pylint --load-plugins pylint_django blogapp/
