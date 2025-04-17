@@ -16,10 +16,15 @@ Including another URLconf
 """
 from django.urls import path, include
 
+from blogapp import common_error_views
+
+handler404 = common_error_views.custom_404_view
+
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path("user/", include("user.urls")),
     path("auth/", include("authcustom.urls")),
     path("post/", include("posts.urls")),
-    path("comment/", include("comments.urls"))
+    path("comment/", include("comments.urls")),
+    path("likes/", include("likes.urls"))
 ]

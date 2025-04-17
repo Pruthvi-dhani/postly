@@ -2,9 +2,11 @@ import json
 import logging
 from io import BytesIO
 from copy import deepcopy
+from json import JSONDecodeError
 
 from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.response import Response
+from django.http import HttpResponse
 
 from blogapp.logging_filters import clean_dict_keys
 
@@ -46,8 +48,20 @@ class RequestResponseLogging:
         response_headers_copy = dict(response.headers)
         clean_dict_keys(response_headers_copy)
         response_log_str.append("Response headers: " + str(response_headers_copy))
-        response_data_copy = deepcopy(response.data)
-        clean_dict_keys(response_data_copy)
-        response_log_str.append("Response body: " + str(response_data_copy))
+        if isinstance(response, Response):
+            response_data_copy = deepcopy(response.data)
+            clean_dict_keys(response_data_copy)
+            response_log_str.append("Response body: " + str(response_data_copy))
+        elif isinstance(response, HttpResponse):
+            response_data = response.content.decode("utf-8", errors="0")
+            try:
+                response_data_json = json.loads(response_data)
+                clean_dict_keys(response_data_json)
+                response_log_str.append("Response body: " + str(response_data_json))
+            except JSONDecodeError:
+                clean_dict_keys(response_data)
+                response_log_str.append("Response body: " + str(response_data))
+        else:
+            response_log_str.append(f"Found a diff response object of type: {type(response)}")
         logging.info("\n".join(response_log_str))
         return response

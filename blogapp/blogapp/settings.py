@@ -27,9 +27,6 @@ SECRET_KEY = app_config.get_value("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = app_config.get_value("DEBUG_MODE")
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,7 +39,8 @@ INSTALLED_APPS = [
     "user",
     "authcustom",
     "posts",
-    "comments"
+    "comments",
+    "likes"
 ]
 
 MIDDLEWARE = [
