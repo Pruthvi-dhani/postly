@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.exceptions import ValidationError
 
 from django.utils.decorators import method_decorator
+from django.db import models
 
 from blogapp.authentication_utils import check_token_authentication
 from comments.serializers import CreateCommentRequest, CreateCommentResponse, EditCommentRequest
@@ -60,3 +61,40 @@ class CommentsCrudView(APIView):
             resp = CreateCommentResponse(comment)
             return Response(resp.data, status=status.HTTP_200_OK)
         raise ValidationError("request is invalid")
+
+
+class CommentsPostView(APIView):
+    """
+    api controller to get comments related to a post
+    """
+    @staticmethod
+    def _get_comments_one_level_deep(post_id: int, parent_comment_id: int = None) -> list[dict]:
+        """
+        gets the next level of comments with the count of replies
+        """
+        replies_objs = Comments.objects.filter(
+            post_id=post_id,
+            is_deleted=False,
+            parent_comment_id=parent_comment_id
+        ).annotate(
+            replies_count=models.Count("child_comments")
+        )
+        replies_lst = list()
+        for replies_obj in replies_objs:
+            replies_lst.append({
+                "id": replies_obj.id,
+                "comment": replies_obj.comment,
+                "replies_count": replies_obj.replies_count
+            })
+        return replies_lst
+
+    @method_decorator(check_token_authentication)
+    def get(self, request: Request, customer_id: int):
+        post_id = request.query_params.get("post_id")
+        parent_comment_id = request.query_params.get("parent_comment_id")
+        if post_id:
+            post_id = int(post_id)
+        if parent_comment_id:
+            parent_comment_id = int(parent_comment_id)
+        comments = self._get_comments_one_level_deep(post_id, parent_comment_id)
+        return Response({"data": comments}, status=status.HTTP_200_OK)
